@@ -90,7 +90,7 @@ export function LoginForm({
             />
           </div>
           <div className="flex flex-col gap-y-1">
-            <Label>Password</Label>
+            <Label>Паоль</Label>
             <Input
               name="password"
               type="password"
@@ -113,16 +113,16 @@ export function LoginForm({
           <p className="ml-4">
             {action === 'sign-in' ? (
               <>
-                Don&apos;t have an account?{' '}
-                <Link href="/sign-up" className="font-medium">
-                  Sign Up
+                Нет аккаунта?{' '}
+                <Link href="/sign-up" className="font-medium underline">
+                  Зарегистрироваться
                 </Link>
               </>
             ) : (
               <>
-                Already have an account?{' '}
+                Уже есть аккаунт?{' '}
                 <Link href="/sign-in" className="font-medium">
-                  Sign In
+                  Войти
                 </Link>
               </>
             )}

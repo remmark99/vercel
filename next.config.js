@@ -9,7 +9,10 @@ module.exports = {
       {
         protocol: 'https',
         hostname: '**.githubusercontent.com'
-      }
+      },
+      {
+        hostname: '**.googleusercontent.com',
+      },
     ]
   }
 }

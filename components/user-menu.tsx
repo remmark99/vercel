@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { IconExternalLink } from '@/components/ui/icons'
+import Link from 'next/link'
 
 export interface UserMenuProps {
   user: Session['user']
@@ -47,7 +48,7 @@ export function UserMenu({ user }: UserMenuProps) {
                 className="h-6 w-6 select-none rounded-full ring-1 ring-zinc-100/10 transition-opacity duration-300 hover:opacity-80"
                 src={
                   user?.user_metadata.avatar_url
-                    ? `${user.user_metadata.avatar_url}&s=60`
+                    ? `${user.user_metadata.avatar_url}`
                     : ''
                 }
                 alt={user.user_metadata.name ?? 'Avatar'}
@@ -61,12 +62,14 @@ export function UserMenu({ user }: UserMenuProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={8} align="start" className="w-[180px]">
-          <DropdownMenuItem className="flex-col items-start">
-            <div className="text-xs font-medium">
-              {user?.user_metadata.name}
-            </div>
-            <div className="text-xs text-zinc-500">{user?.email}</div>
-          </DropdownMenuItem>
+          <Link href='/profile'>
+            <DropdownMenuItem className="flex-col items-start">
+              <div className="text-xs font-medium">
+                {user?.user_metadata.name}
+              </div>
+              <div className="text-xs text-zinc-500">{user?.email}</div>
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <a

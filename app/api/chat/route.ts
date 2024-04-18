@@ -7,11 +7,20 @@ import { Database } from '@/lib/db_types'
 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import OpenAI from "openai";
+
+const openaiRus = new OpenAI({ 
+  baseURL: "https://api.proxyapi.ru/openai/v1", 
+  apiKey: "sk-ykDLbFP4CgJa8i4jhuwYCvXYFoNqQAtG" 
+});
+
 
 export const runtime = 'edge'
 
+// Для разработки, PVN версия через api.proxyapi.ru
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: 'sk-ykDLbFP4CgJa8i4jhuwYCvXYFoNqQAtG',
+  basePath: 'https://api.proxyapi.ru/openai/v1'
 })
 
 const openai = new OpenAIApi(configuration)
@@ -25,11 +34,21 @@ export async function POST(req: Request) {
   const { messages, previewToken } = json
   const userId = (await auth({ cookieStore }))?.user.id
 
-  if (!userId) {
-    return new Response('Unauthorized', {
-      status: 401
-    })
-  }
+  // if (!userId) {
+  //   return new Response('Unauthorized', {
+  //     status: 401
+  //   })
+  // }
+
+
+  // Для разработки, PVN версия через api.proxyapi.ru
+
+  // const completion = await openaiRus.chat.completions.create({
+  //   messages: [{ role: "system", content: "You are a helpful assistant." }],
+  //   model: "gpt-3.5-turbo",
+  // });
+
+  // console.log("OPEN AI:", completion.choices[0]);
 
   if (previewToken) {
     configuration.apiKey = previewToken

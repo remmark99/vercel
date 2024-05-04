@@ -17,9 +17,12 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { useState } from 'react'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
+import { useAtom } from 'jotai'
+import { modelAtom } from '@/app/atoms'
+import customRevalidatePath from '@/app/actions'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 export interface ChatProps extends React.ComponentProps<'div'> {
@@ -34,20 +37,28 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
   )
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
+  const [model] = useAtom(modelAtom)
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
       initialMessages,
-      id,
+      // TODO: костыль, иначе каждый раз к id чата добавляется модель, что создает новые
+      id: id?.includes(model) ? id : id + model,
       body: {
-        id,
-        previewToken
+        id: id?.includes(model) ? id : id + model,
+        previewToken,
+        model
       },
       onResponse(response) {
+        customRevalidatePath('/profile', 'page')
         if (response.status === 401) {
           toast.error(response.statusText)
         }
+      },
+      onError(err) {
+        toast.error(JSON.parse(err.message).detail)
       }
     })
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
